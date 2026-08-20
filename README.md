@@ -29,3 +29,9 @@ For week 2, two analyses were introduced - PCA (principal component analysis), a
 For week 3, t-values for each dimension were calculated to try and determine significance of each dimension. Previously, each dimension for each function was assumed to be equally important - this has proved to be an invalid assumption based on the t-values, and as such different dimensions are weighted differently. It remains to be seen if these updated values hold. Normalisation of output values was also introduced to allow for healthier surrogate models.
 
 What makes my approach unique is that I'm unafraid to follow an exploration-heavy strategy. Whilst many others have begun exploiting functions quickly, I am focusing on mapping each function space better such that I can tune my algorithms to very quickly converge onto what I hope is a true maxima. Many forms of analysis are going into this process, and it's interesting sorting through the data to figure out what's working and what's not.
+
+# Section 5: dynamic log
+This section will cover musings and experiments done for each week
+
+### Week 5:
+This week has involved the use of kernel-based PCA to try and query points. Unfortunately, PCA appears to lose a significant amount of data during our reconstructions, so this week will serve as a likely dud week. It is an exciting approach however! This method is being attempted for all but functions 1, 2, and 5 - as 5 is already approaching a peak seemingly, and functions 1 and 2 do not need dimensionality reduction for interpretation.
