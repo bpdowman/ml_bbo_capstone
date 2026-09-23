@@ -11,8 +11,10 @@ fn_res = [100, 100, 100, 50,
 n_random = 23 ## approx 1e7
 fn_tunes = [1., 1., 0.05, 0.05,
             0.05, 0.025, .05, .05]
-fn_types = ["ucb", "ucb", "pi", "pi",
-            "pi", "pi", "pi", "pi"]
+# fn_types = ["ucb", "ucb", "pi", "pi",
+#             "pi", "pi", "pi", "pi"]
+fn_types = ["ei", "ei", "ei", "ei",
+            "ei", "ei", "ei", "ei"]
 fn_lengths = [[1., 1.], ## 1
               [1.5, 2.], ## 2
               [5., 1., .75], ## 3

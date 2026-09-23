@@ -43,6 +43,12 @@ def get_next_query(inp, out, lengthscale, n_grid, tune,
         acquisition_func = mean + tune*std
     elif acq_type == "pi":
         acquisition_func = norm.cdf((mean - ymax - tune)/(std + 1e-12))
+    elif acq_type == "ei":
+        m = std > 0
+        z = (mean - ymax)/std[m]
+        ei = np.zeros_like(mean)
+        ei[m] = (mean[m] - ymax)*norm.cdf(z) + std[m]*norm.pdf(z)
+        acquisition_func = ei
     else:
         raise ValueError("Invalid acquisition function %s" %acq_type)
     

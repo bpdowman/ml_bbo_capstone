@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from sklearn.gaussian_process import GaussianProcessRegressor, kernels
 from bbo_data_dict import new_inputs, new_outputs
 from sklearn.preprocessing import StandardScaler
+from scipy.stats import norm
+
 
 ip = "initial_data\\function_2\\initial_inputs.npy"
 op = "initial_data\\function_2\\initial_outputs.npy"
@@ -66,7 +68,13 @@ ax2 = fig.add_subplot(1, 3, 2, projection='3d')
 ax3 = fig.add_subplot(1, 3, 3, projection='3d')
 
 
-acquisition_func = mean + beta*std
+ymax = max(out)
+
+m = std > 0
+z = (mean - ymax)/std[m]
+ei = np.zeros_like(mean)
+ei[m] = (mean[m] - ymax)*norm.cdf(z) + std[m]*norm.pdf(z)
+acquisition_func = ei
 acq_plt = np.reshape(acquisition_func, (n_grid, n_grid))
 
 ax1.plot_surface(x, y, mean_plt, cmap="coolwarm")
