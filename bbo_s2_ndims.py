@@ -6,15 +6,7 @@ from sklearn.preprocessing import PowerTransformer
 
 
 fn = range(1, 9)
-fn_res = [100, 100, 100, 50, 
-          50, 0, 0, 0]
 n_random = 23 ## approx 1e7
-fn_tunes = [1., 1., 0.05, 0.05,
-            0.05, 0.025, .05, .05]
-# fn_types = ["ucb", "ucb", "pi", "pi",
-#             "pi", "pi", "pi", "pi"]
-fn_types = ["ei", "ei", "ei", "ei",
-            "ei", "ei", "ei", "ei"]
 fn_lengths = [[1., 1.], ## 1
               [1.5, 2.], ## 2
               [5., 1., .75], ## 3
@@ -32,8 +24,8 @@ fn_vars = [.001, .5, .5, .007,
 
 ranking_new_guesses=False
 
-for (f_number, grid_res, tune, atype, length_mod, length_c, nu, noise_var) in \
-        zip(fn, fn_res, fn_tunes, fn_types, fn_lengths, fn_cs, fn_nus, fn_vars):
+for (f_number, length_mod, length_c, nu, noise_var) in \
+        zip(fn, fn_lengths, fn_cs, fn_nus, fn_vars):
     inp, out = fetch_function_data(f_number)
     inp = np.concat([inp, new_inputs[f_number]])
     out = np.concat([out, new_outputs[f_number]])
@@ -65,12 +57,11 @@ for (f_number, grid_res, tune, atype, length_mod, length_c, nu, noise_var) in \
         out = transformer.fit_transform(out.reshape((-1, 1)))
         ts = time()
         
-        qp = get_next_query(inp, out, scales, grid_res,
-                            tune, n_random, nu, noise_var, acq_type=atype)
+        qp = get_next_query(inp, out, scales, n_random, nu, noise_var)
         
         tend = time()
 
-        print("Suggested point for function %s (res %s) is " %(f_number, grid_res), end=None)
+        print("Suggested point for function %s is " %f_number, end=None)
         divs = ["-"]*(len(qp)-1)
         divs = np.concat([divs, ["\n"]])
         for (point, divider) in zip(qp, divs):
