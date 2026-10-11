@@ -1,32 +1,42 @@
-from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import qmc
 from sklearn.gaussian_process import GaussianProcessRegressor, kernels
 from scipy.stats import norm
-from bbo_data_dict import new_inputs, new_outputs
+from data.bbo_data_dict import new_inputs, new_outputs
+from sklearn.preprocessing import PowerTransformer
+
 
 n_random = 12
-n = dims = 2
+dims = 2
+fn = 1
 
-l = [1.5, 2.] ## 2
-
-c = .5
-nu = 4.5
-noise_var = .5
-
+if fn == 1:
+    l = [1., 1.]
+    c = 1.
+    nu = 1.5
+    noise_var = .001
+elif fn == 2:
+    l = [1.5, 2.] ## 2
+    c = .5
+    nu = 4.5
+    noise_var = .5
+    
 correction = 0.5
 
-ip = "initial_data\\function_2\\initial_inputs.npy"
-op = "initial_data\\function_2\\initial_outputs.npy"
+
+ip = "initial_data\\function_%s\\initial_inputs.npy" %fn
+op = "initial_data\\function_%s\\initial_outputs.npy" %fn
 
 
 inp = np.load(ip)
 out = np.load(op)
 
-inp = np.concat([inp, new_inputs[2]])
-out = np.concat([out, new_outputs[2]])
+inp = np.concat([inp, new_inputs[fn]])
+out = np.concat([out, new_outputs[fn]])
 
+scaler = PowerTransformer()
+out = scaler.fit_transform(out.reshape((-1, 1)))
 
 ls = len(inp)**(-1/2)
 lengthscale = ls*np.array(l)*c

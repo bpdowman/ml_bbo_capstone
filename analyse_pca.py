@@ -4,7 +4,7 @@ import matplotlib.colors as mc
 from sklearn.decomposition import PCA, KernelPCA
 from sklearn.cluster import DBSCAN
 
-from bbo_data_dict import new_inputs, new_outputs
+from data.bbo_data_dict import new_inputs, new_outputs
 
 ec_dict = {-1: "b",
            0 : "r",
@@ -17,19 +17,20 @@ ec_dict = {-1: "b",
 eps_dict = {1: 0.2, 2 : 0.2, 3 : 0.3, 4 : 0.35,
             5 : 0.4, 6 : 0.5, 7 : 0.6, 8 : 0.65}
 
-fn = 8
+fn = 7
+
+analyse_scree = False
 
 ip = "initial_data\\function_%s\\initial_inputs.npy" %fn
 op = "initial_data\\function_%s\\initial_outputs.npy" %fn
 
-analyse_scree = False
 
 inp = np.load(ip)
 out = np.load(op)
 
 inp = np.concat([inp, new_inputs[fn]])
 out = np.concat([out, new_outputs[fn]])
-    
+
 if not analyse_scree:
     
     # pca = KernelPCA(n_components=2, kernel="poly", gamma=5,
@@ -82,11 +83,13 @@ if not analyse_scree:
 else:
     fig, (ax_pca, ax_scree) = plt.subplots(1, 2)
 
-    n_components = 2
+    n_components = len(inp[-1])
     pca = PCA(n_components=n_components, random_state=42)
     pca.fit(inp[:-1])
+    x = np.cumsum(pca.explained_variance_ratio_)
     
-    plt.plot(range(1, n_components+1), pca.explained_variance_ratio_, label=sum(pca.explained_variance_ratio_))
+    plt.plot(range(1, n_components+1), x, label=sum(pca.explained_variance_ratio_))
+    plt.hlines([.75], xmin=1, xmax=n_components, linestyle="-", color="gray")
     
     plt.ylim(0, 1)
     plt.xticks(range(1, n_components+1))

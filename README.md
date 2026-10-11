@@ -35,3 +35,9 @@ This section will cover musings and experiments done for each week
 
 ### Week 5:
 This week has involved the use of kernel-based PCA to try and query points. Unfortunately, PCA appears to lose a significant amount of data during our reconstructions, so this week will serve as a likely dud week. It is an exciting approach however! This method is being attempted for all but functions 1, 2, and 5 - as 5 is already approaching a peak seemingly, and functions 1 and 2 do not need dimensionality reduction for interpretation.
+
+### Week 11:
+
+paper:
+
+https://mlg.eng.cam.ac.uk/pub/pdf/QuiRasSinetal06.pdf

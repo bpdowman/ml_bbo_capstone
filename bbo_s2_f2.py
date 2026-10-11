@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.gaussian_process import GaussianProcessRegressor, kernels
-from bbo_data_dict import new_inputs, new_outputs
+from data.bbo_data_dict import new_inputs, new_outputs
 from sklearn.preprocessing import PowerTransformer
 from scipy.stats import norm
 
@@ -16,16 +16,17 @@ out = np.load(op)
 inp = np.concat([inp, new_inputs[2]])
 out = np.concat([out, new_outputs[2]])
 
-noise_var = .5
+noise_var = 0.03
 
 lengthscales = np.array([1.5, 2.])
 ls = len(inp)**(-1/2)
-lengthscale = ls*np.array(lengthscales)*.5
+lengthscale = ls*np.array(lengthscales)*1.5
 
 kernel = kernels.Matern(length_scale=lengthscale, 
                         length_scale_bounds="fixed",
-                        nu=4.5)
-model = GaussianProcessRegressor(kernel=kernel, alpha=noise_var)
+                        nu=2.5)
+noise_kernel = kernels.WhiteKernel(noise_level=noise_var, noise_level_bounds="fixed")
+model = GaussianProcessRegressor(kernel=kernel+noise_kernel)
 
 n_grid = 100
 eval_grid_c = np.linspace(0, 1, n_grid)
@@ -36,9 +37,9 @@ for i in range(len(eg_x)):
         eg.append([eg_x[i][j], eg_y[i][j]])
 
 
-# scaler = PowerTransformer()
-# out_reshape = scaler.fit_transform(out.reshape((-1, 1)))
-out_reshape = out
+scaler = PowerTransformer()
+out_reshape = scaler.fit_transform(out.reshape((-1, 1)))
+# out_reshape = out
 model.fit(inp, out_reshape)
 mean, std = model.predict(eg, return_std=True)
 

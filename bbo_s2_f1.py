@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.gaussian_process import GaussianProcessRegressor, kernels
-from bbo_data_dict import new_inputs, new_outputs
-from sklearn.preprocessing import StandardScaler
+from data.bbo_data_dict import new_inputs, new_outputs
+from sklearn.preprocessing import PowerTransformer
 from scipy.stats import norm
 
 
@@ -18,12 +18,12 @@ inp = np.concat([inp, new_inputs[1]])
 out = np.concat([out, new_outputs[1]])
 
 
-noise_std = 0.05
+noise_std = 1e-6
 beta = 1
 lengthscale = len(inp)**(-1/np.shape(inp)[-1])
 
-kernel = kernels.Matern(length_scale=lengthscale, length_scale_bounds="fixed", nu=2.5)
-model = GaussianProcessRegressor(kernel=kernel, alpha=noise_std**2, n_restarts_optimizer=10)
+kernel = kernels.Matern(length_scale=lengthscale*0.1, length_scale_bounds="fixed", nu=3.5)
+model = GaussianProcessRegressor(kernel=kernel, alpha=noise_std)
 
 n_grid = 100
 eval_grid_c = np.linspace(0, 1, n_grid)
@@ -35,8 +35,7 @@ for i in range(len(eg_x)):
 
 
 
-scaler = StandardScaler()
-out = np.array([i if i>=0. else 0. for i in out])
+scaler = PowerTransformer()
 out = scaler.fit_transform(out.reshape((-1, 1)))
 model.fit(inp, out)
 mean, std = model.predict(eg, return_std=True)

@@ -1,7 +1,7 @@
 from bbo_s2_ndims_methods import fetch_function_data, rank_guess_values, get_next_query
 from time import time
 import numpy as np
-from bbo_data_dict import new_inputs, new_outputs
+from data.bbo_data_dict import new_inputs, new_outputs
 from sklearn.preprocessing import PowerTransformer
 
 
@@ -16,13 +16,14 @@ fn_lengths = [[1., 1.], ## 1
               [1., 1., 1., 1., 1., 1.], ## 7
               [1., 1., 1., 2., 3., 5., 1., 3.]] ## 8
 fn_cs = [1., 0.5, 1, 0.5, 
-          1., 3., 0.4, 1.]
-fn_nus = [1.5, 1.5, 1.5, 2.5,
-          1.5, 2.5, 2.5, 1.5]
-fn_vars = [.001, .5, .5, .007,
-           .002, .07, .025, .007]
+          .7, 3., 0.7, 2.]
+fn_nus = [1.5, 1.5, 1.5, .5,
+          2.5, .5, 2.5, 1.5]
+fn_vars = [0., .5, 1e-6, 0.5,
+           5., .03, 1e-6, .002]
 
 ranking_new_guesses=False
+
 
 for (f_number, length_mod, length_c, nu, noise_var) in \
         zip(fn, fn_lengths, fn_cs, fn_nus, fn_vars):
@@ -30,6 +31,7 @@ for (f_number, length_mod, length_c, nu, noise_var) in \
     inp = np.concat([inp, new_inputs[f_number]])
     out = np.concat([out, new_outputs[f_number]])
     n_new = len(new_outputs[f_number])
+    
     
     lengthscale = len(inp)**(-1/np.shape(inp)[-1])
     scales = lengthscale*np.array(length_mod)*length_c
