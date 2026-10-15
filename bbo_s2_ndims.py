@@ -22,7 +22,7 @@ fn_nus = [1.5, 1.5, 1.5, .5,
 fn_vars = [0., .5, 1e-6, 0.5,
            5., .03, 1e-6, .002]
 
-ranking_new_guesses=True
+ranking_new_guesses=False
 
 
 for (f_number, length_mod, length_c, nu, noise_var) in \

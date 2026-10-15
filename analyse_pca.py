@@ -87,6 +87,7 @@ else:
     pca = PCA(n_components=n_components, random_state=42)
     pca.fit(inp[:-1])
     x = np.cumsum(pca.explained_variance_ratio_)
+    print("2-component variation explained: %s%%" %round(x[1]*100, 2))
     
     plt.plot(range(1, n_components+1), x, label=sum(pca.explained_variance_ratio_))
     plt.hlines([.75], xmin=1, xmax=n_components, linestyle="-", color="gray")
