@@ -5,7 +5,7 @@ from data.bbo_data_dict import new_inputs, new_outputs
 from sklearn.preprocessing import StandardScaler, PowerTransformer
 
 
-fn = 6
+fn = 4
 
 ip = "initial_data\\function_%s\\initial_inputs.npy" %fn
 op = "initial_data\\function_%s\initial_outputs.npy" %fn
@@ -22,16 +22,16 @@ out_scaled = scaler.fit_transform(out.reshape((-1, 1)))
 transformer = PowerTransformer()
 out_transformed = transformer.fit_transform(out.reshape((-1, 1)))
 
-fig, (ax1, ax2) = plt.subplots(2, dims, figsize=(2*dims, 4), layout="tight")
+fig, (ax1, ax2) = plt.subplots(2, dims, figsize=(2*dims, 4), layout="tight", dpi=1000)
 
 for i, axis in enumerate(ax1):
     x = inp[:, i]
-    axis.scatter(x, out_scaled)
+    axis.scatter(x, out_scaled, s=6)
     axis.set_title("Scaled dim %s" %i)
     
 for i, axis in enumerate(ax2):
     x = inp[:, i]
-    axis.scatter(x, out_transformed)
+    axis.scatter(x, out_transformed, s=6)
     axis.set_title("Trans. dim %s" %i)
 
 plt.show()
